@@ -1,0 +1,17 @@
+---
+
+nextcloud_version: 12.0.7
+nextcloud_service_user: nextcloud
+nextcloud_path: /var/www/nextcloud
+nextcloud_urls:
+  - cloud.exmaple.net
+  - nextcloud.exmaple.net
+nextcloud_admin: admin
+nextcloud_admin_password: MyPassword
+
+nextcloud_db_host: nextcloud-database.lxd
+nextcloud_db_user: nextcloud
+nextcloud_db_password: MyDbPassword
+
+nextcloud_redis: true
+nextcloud_redis_host: nextcloud-redis.lxd

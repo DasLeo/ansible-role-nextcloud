@@ -1,0 +1,5 @@
+---
+
+- name: check if Nextcloud is already installed
+  stat:
+    path: "{{ nextcloud_path }}"
