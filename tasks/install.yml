@@ -1,0 +1,56 @@
+---
+
+- name: Create Nextcloud root directory
+  file:
+    path: "{{ nextcloud_path }}"
+    state: directory
+    owner: root
+    group: "{{ nextcloud_user }}"
+    mode: 0750
+
+- name: Download and and extract Nextcloud {{ nextcloud_version }}
+  unarchive:
+    src: "https://download.nextcloud.com/server/releases/nextcloud-{{ nextcloud_version }}.tar.bz2"
+    remote_src: yes
+    dest: "{{ nextcloud_path }}/"
+    owner: root
+    group: "{{ nextcloud_user }}"
+    mode: u=rwX,g=rX
+    extra_opts:
+    - --strip 1
+
+- name: Check if local database server is installed
+  stat:
+    path: /etc/mysql/my.cnf
+  register: localdb
+
+- name: Install Nextcloud on remote database server
+  command: |
+    sudo -u {{ nextcloud_user }} -- sh -c \
+    'umask 0027; php occ maintenance:install --database "mysql" --database-name "{{ nextcloud_db_name }}" --database-host "{{ nextcloud_db_host }}" --database-user "{{ nextcloud_db_user }}" --database-pass "{{ nextcloud_db_password }}" --admin-user "{{ nextcloud_admin }}" --admin-pass "{{ nextcloud_admin_password }}" --data-dir "{{ nextcloud_path }}/data"'
+  args:
+    chdir: "{{ nextcloud_path }}"
+  when: not localdb.stat.exists
+
+- name: Install Nextcloud on local database server
+  command: |
+    sudo -u {{ nextcloud_user }} -- sh -c \
+    'umask 0027; php occ maintenance:install --database "mysql" --database-name "{{ nextcloud_db_name }}" --database-user "{{ nextcloud_db_user }}" --database-pass "{{ nextcloud_db_password }}" --admin-user "{{ nextcloud_admin }}" --admin-pass "{{ nextcloud_admin_password }}" --data-dir "{{ nextcloud_path }}/data"'
+  args:
+    chdir: "{{ nextcloud_path }}"
+  when: localdb.stat.exists
+
+- name: (NEXTCLOUD) Add public URL as trusted location
+  lineinfile:
+    path: /home/{{ nextcloud_user }}/public_html/nextcloud/config/config.php
+    insertafter: '0 =>'
+    line: "    1 => '{{ nextcloud_hostname }}',"
+    state: present
+
+- name: (NEXTCLOUD) Configure memory caching
+  blockinfile:
+    path: /home/{{ nextcloud_user }}/public_html/nextcloud/config/config.php
+    marker: "/* {mark} Memory Caching Configuration */"
+    insertbefore: '\);'
+    state: present
+    block: "{{ lookup('file', 'files/nextcloud-config.php') }}"
