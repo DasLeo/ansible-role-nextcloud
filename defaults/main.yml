@@ -1,8 +1,8 @@
 ---
 
 nextcloud_version: 12.0.7
-nextcloud_service_user: nextcloud
 nextcloud_path: /var/www/nextcloud
+nextcloud_user: nextcloud
 nextcloud_urls:
   - cloud.exmaple.net
   - nextcloud.exmaple.net
