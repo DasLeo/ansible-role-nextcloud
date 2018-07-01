@@ -1,5 +1,24 @@
 ---
 
+- name: create nextcloud php pool service user
+  user:
+    state: present
+    name: "{{ nextcloud_user }}"
+    shell: /bin/false
+    system: yes
+    create_home: no
+    home: /nonexistant/home
+    comment: nextcloud php service user,,,
+
 - name: check if Nextcloud is already installed
   stat:
-    path: "{{ nextcloud_path }}"
+    path: "{{ nextcloud_path }}/config/config.php"
+  register: nextcloud_install
+
+- name: New Nextcloud installation
+  include_tasks: install.yml
+  when: not nextcloud_install.stat.exists
+
+- name: Nextcloud upgrade install
+  include_tasks: upgrade.yml
+  when: nextcloud_install.stat.exists
