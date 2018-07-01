@@ -12,6 +12,7 @@ nextcloud_admin_password: MyPassword
 nextcloud_db_host: nextcloud-database.lxd
 nextcloud_db_user: nextcloud
 nextcloud_db_password: MyDbPassword
+nextcloud_db_name: nextcloud
 
 nextcloud_redis: true
 nextcloud_redis_host: nextcloud-redis.lxd
