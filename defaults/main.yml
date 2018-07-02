@@ -8,6 +8,9 @@ nextcloud_urls:
   - nextcloud.exmaple.net
 nextcloud_admin: admin
 nextcloud_admin_password: MyPassword
+# possibilities: production | stable | daily | beta
+nextcloud_release_channel: production
+nextcloud_memcache_local: '\OC\Memcache\APCu'
 
 nextcloud_db_host: nextcloud-database.lxd
 nextcloud_db_user: nextcloud
