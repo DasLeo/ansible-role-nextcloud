@@ -10,7 +10,8 @@
 
 - name: Download and and extract Nextcloud {{ nextcloud_version }}
   unarchive:
-    src: "https://download.nextcloud.com/server/releases/nextcloud-{{ nextcloud_version }}.tar.bz2"
+#    src: "https://download.nextcloud.com/server/releases/nextcloud-{{ nextcloud_version }}.tar.bz2"
+    src: "/var/www/nextcloud-{{ nextcloud_version }}.tar.bz2"
     remote_src: yes
     dest: "{{ nextcloud_path }}/"
     owner: root
