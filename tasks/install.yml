@@ -17,7 +17,7 @@
     group: "{{ nextcloud_user }}"
     mode: u=rwX,g=rX
     extra_opts:
-    - --strip 1
+    - --strip-components=1
   notify:
     - set strict permissions
 
