@@ -61,6 +61,7 @@
     'umask 0027; php occ maintenance:install --database "mysql" --database-name "{{ nextcloud_db_name }}" --database-host "{{ nextcloud_db_host }}" --database-user "{{ nextcloud_db_user }}" --database-pass "{{ nextcloud_db_password }}" --admin-user "{{ nextcloud_admin }}" --admin-pass "{{ nextcloud_admin_password }}" --data-dir "{{ nextcloud_path }}/data"'
   args:
     chdir: "{{ nextcloud_path }}"
+  register: nextcloud_install
   when: not localdb.stat.exists
 
 - name: Install Nextcloud on local database server
@@ -69,7 +70,11 @@
     'umask 0027; php occ maintenance:install --database "mysql" --database-name "{{ nextcloud_db_name }}" --database-user "{{ nextcloud_db_user }}" --database-pass "{{ nextcloud_db_password }}" --admin-user "{{ nextcloud_admin }}" --admin-pass "{{ nextcloud_admin_password }}" --data-dir "{{ nextcloud_path }}/data"'
   args:
     chdir: "{{ nextcloud_path }}"
+  register: nextcloud_install
   when: localdb.stat.exists
+
+- debug:
+    msg: "{{ nextcloud_path.stdout }}"
 
 - name: Add trusted domains to config
   shell: |
