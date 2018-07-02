@@ -74,7 +74,7 @@
   when: localdb.stat.exists
 
 - debug:
-    msg: "{{ nextcloud_path.stdout }}"
+    msg: "{{ nextcloud_install.stdout }}"
 
 - name: Add trusted domains to config
   shell: |
