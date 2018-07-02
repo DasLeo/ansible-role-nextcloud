@@ -1,4 +1,0 @@
----
-
-- name: set strict permissions
-  include_tasks: strict-permissions.yml
