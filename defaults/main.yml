@@ -6,8 +6,10 @@ nextcloud_user: nextcloud
 nextcloud_urls:
   - cloud.exmaple.net
   - nextcloud.exmaple.net
+
 nextcloud_admin: admin
 nextcloud_admin_password: MyPassword
+
 # possibilities: production | stable | daily | beta
 nextcloud_release_channel: production
 nextcloud_memcache_local: '\OC\Memcache\APCu'
@@ -18,4 +20,6 @@ nextcloud_db_password: MyDbPassword
 nextcloud_db_name: nextcloud
 
 nextcloud_redis: true
-nextcloud_redis_host: nextcloud-redis.lxd
+nextcloud_redis_host: '127.0.0.1'
+nextcloud_redis_port: 6379
+nextcloud_redis_password: []
