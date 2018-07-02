@@ -35,7 +35,7 @@
         mode: u=rwX,g=rX
         recurse: yes
     - file:
-        path: "{{ nextcloud_user }}/{{ item }}"
+        path: "{{ nextcloud_path }}/{{ item }}"
         owner: "{{ nextcloud_user }}"
         group: "{{ nextcloud_user }}"
         recurse: yes
@@ -47,7 +47,7 @@
         - themes
         - updater
     - file:
-        path: "{{ nextcloud_user }}/occ"
+        path: "{{ nextcloud_path }}/occ"
         mode: '+x'
 
 - name: Check if local database server is installed
