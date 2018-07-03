@@ -15,13 +15,21 @@
     path: "{{ nextcloud_path }}/config/config.php"
   register: nextcloud_install
 
+- name: determine currently installed version
+  shell: |
+    grep OC_VersionString {{ nextcloud_path }}/version.php | cut -d "'" -f2
+  changed_when: false
+  register: nextcloud_installed_version
+  when: nextcloud_install.stat.exists
+
 - name: New Nextcloud installation
   include_tasks: install.yml
   when: not nextcloud_install.stat.exists
 
 - name: Nextcloud upgrade install
   include_tasks: upgrade.yml
-  when: nextcloud_install.stat.exists
+  when: nextcloud_install.stat.exists and nextcloud_version is version(nextcloud_installed_version, '>')
+
 - name: Setting Nextcloud config settings in config.php
   block:
     - name: Check current setting for {{ item.name }}

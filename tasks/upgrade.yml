@@ -1,6 +1,4 @@
 ---
 
-- name: determine currently installed version
-  shell: |
-    grep OC_VersionString {{ nextcloud_path }}/version.php | cut -d "'" -f2
-  register: nextcloud_installed_version
+- debug:
+  msg: Dummy: doing upgrade here!!!
