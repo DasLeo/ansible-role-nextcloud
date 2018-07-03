@@ -4,8 +4,11 @@
   shell: systemctl | grep running | grep -P 'php([0-9.]+)-fpm\.service' | awk '{print $1}'
   register: phpfpm_nextcloud_service
 
-- debug:
-  msg: Disable Nextcloud systemd timer
+- name: Disable Nextcloud systemd timer
+  systemd:
+    name: nextcloudcron.timer
+    state: stopped
+    enabled: no
 
 - name: Putting Nextcloud into Maintenance mode
   shell: |
@@ -92,5 +95,8 @@
   register: maintenance_mode
   failed_when: maintenance_mode.stdout != 'Maintenance mode disabled' or maintenance_mode.rc != 0
 
-- debug:
-  msg: Re-Enable Nextcloud systemd timer
+- name: Re-enable and start Nextcloud systemd timer
+  systemd:
+    name: nextcloudcron.timer
+    state: started
+    enabled: yes
