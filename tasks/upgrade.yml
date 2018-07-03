@@ -21,7 +21,7 @@
 
 - name: Stop nginx and php-fpm
   systemd:
-    name: {{ item }}
+    name: "{{ item }}"
     state: stopped
   loop:
     - nginx
@@ -51,11 +51,11 @@
 
 - name: Copy config.php to new version folder
   copy:
-    src: {{ nextcloud_path }}-old/config/config.php
-    dest: {{ nextcloud_path }}/config/config.php
+    src: "{{ nextcloud_path }}-old/config/config.php"
+    dest: "{{ nextcloud_path }}/config/config.php"
     remote_src: yes
-    owner: {{ nextcloud_user }}
-    group: {{ nextcloud_user }}
+    owner: "{{ nextcloud_user }}"
+    group: "{{ nextcloud_user }}"
     mode: 0640
 
 - name: Move data folder to new version folder
@@ -71,7 +71,7 @@
 
 - name: Start nginx and php-fpm
   systemd:
-    name: {{ item }}
+    name: "{{ item }}"
     state: started
   loop:
     - nginx
