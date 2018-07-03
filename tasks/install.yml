@@ -58,10 +58,3 @@
   loop: "{{ nextcloud_urls }}"
   loop_control:
     index_var: index
-
-- name: Set memory caching to APCu
-  shell: |
-    sudo -u {{ nextcloud_user }} -- sh -c \
-    'umask 0027; php occ config:system:set memcache.local --value="{{ nextcloud_memcache_local }}"'
-  args:
-    chdir: "{{ nextcloud_path }}"

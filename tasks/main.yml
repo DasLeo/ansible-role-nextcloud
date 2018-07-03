@@ -22,6 +22,25 @@
 - name: Nextcloud upgrade install
   include_tasks: upgrade.yml
   when: nextcloud_install.stat.exists
+- name: Setting Nextcloud config settings in config.php
+  block:
+    - name: Check current setting for {{ item.name }}
+      shell: |
+        sudo -u {{ nextcloud_user }} -- sh -c \
+        'umask 0027; php occ config:system:get {{ item.name }} --value="{{ item.value }}"'
+      args:
+        chdir:
+      register: config_setting
+      changed_when: false
 
+    - name: Setting {{ item.name }} to {{ item.value }}
+      shell: |
+        sudo -u {{ nextcloud_user }} -- sh -c \
+        'umask 0027; php occ config:system:set {{ item.name }} --value="{{ item.value }}"'
+      args:
+        chdir: "{{ nextcloud_path }}"
+      when: config_setting.stdout != item.value
+  loop: "{{ nextcloud_config_settings }}"
+  
 - name: Setting strict permissions
   include_tasks: strict-permissions.yml
