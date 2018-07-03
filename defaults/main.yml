@@ -26,3 +26,9 @@ nextcloud_config_settings:
   # possibilities: production | stable | daily | beta
   - name: updater.release.channel
     value: production
+
+nextcloud_use_custom_apps: false
+# nextcloud_apps:
+#   - bruteforcesettings
+#   - custom-app2
+

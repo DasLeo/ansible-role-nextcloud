@@ -1,4 +1,96 @@
 ---
 
+- name: Determine current php-fpm service
+  shell: systemctl | grep running | grep -P 'php([0-9.]+)-fpm\.service' | awk '{print $1}'
+  register: phpfpm_nextcloud_service
+
 - debug:
-  msg: Dummy: doing upgrade here!!!
+  msg: Disable Nextcloud systemd timer
+
+- name: Putting Nextcloud into Maintenance mode
+  shell: |
+    sudo -u {{ nextcloud_user }} -- sh -c \
+    'umask 0027; php occ maintenance:mode --on'
+  args:
+    chdir: "{{ nextcloud_path }}"
+  register: maintenance_mode
+  failed_when: maintenance_mode.stdout != 'Maintenance mode enabled' or maintenance_mode.rc != 0
+
+- name: Stop nginx and php-fpm
+  systemd:
+    name: {{ item }}
+    state: stopped
+  loop:
+    - nginx
+    - phpfpm_nextcloud_service.stdout
+
+- name: Rename current Nextcloud folder
+  shell: "mv {{ nextcloud_path }}{,-old}"
+
+- name: Create new Nextcloud root directory
+  file:
+    path: "{{ nextcloud_path }}"
+    state: directory
+    owner: root
+    group: "{{ nextcloud_user }}"
+    mode: 0750
+
+- name: Download and and extract Nextcloud {{ nextcloud_version }}
+  unarchive:
+    src: "https://download.nextcloud.com/server/releases/nextcloud-{{ nextcloud_version }}.tar.bz2"
+    remote_src: yes
+    dest: "{{ nextcloud_path }}/"
+    owner: root
+    group: "{{ nextcloud_user }}"
+    mode: u=rwX,g=rX,o-rwx
+    extra_opts:
+    - --strip-components=1
+
+- name: Copy config.php to new version folder
+  copy:
+    src: {{ nextcloud_path }}-old/config/config.php
+    dest: {{ nextcloud_path }}/config/config.php
+    remote_src: yes
+    owner: {{ nextcloud_user }}
+    group: {{ nextcloud_user }}
+    mode: 0640
+
+- name: Move data folder to new version folder
+  shell: "mv {{ nextcloud_path }}-old/data {{ nextcloud_path }}/data"
+
+- name: Copy missing Nextcloud Apps to new version folder
+  shell: "cp -r --no-clobber '{{ nextcloud_path }}-old/apps/{{ item }}' '{{ nextcloud_path }}/apps/{{ item }}'"
+  loop: "{{ nextcloud_apps }}"
+  when: nextcloud_use_custom_apps
+
+- name: Setting strict permissions
+  include_tasks: strict-permissions.yml
+
+- name: Start nginx and php-fpm
+  systemd:
+    name: {{ item }}
+    state: started
+  loop:
+    - nginx
+    - phpfpm_nextcloud_service.stdout
+
+- name: Run Nextcloud occ upgrade
+  shell: |
+    sudo -u {{ nextcloud_user }} -- sh -c \
+    'umask 0027; php occ upgrade'
+  args:
+    chdir: "{{ nextcloud_path }}"
+  register: nextcloud_occ_upgrade
+  failed_when: 'Update successful' not in nextcloud_occ_upgrade.stdout or nextcloud_occ_upgrade.rc != 0
+
+- name: Disabling Nextcloud maintenance mode
+  shell: |
+    sudo -u {{ nextcloud_user }} -- sh -c \
+    'umask 0027; php occ maintenance:mode --off'
+  args:
+    chdir: "{{ nextcloud_path }}"
+  register: maintenance_mode
+  failed_when: maintenance_mode.stdout != 'Maintenance mode disabled' or maintenance_mode.rc != 0
+
+- debug:
+  msg: Re-Enable Nextcloud systemd timer
