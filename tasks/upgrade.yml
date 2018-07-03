@@ -74,8 +74,8 @@
     name: "{{ item }}"
     state: started
   loop:
-    - nginx
     - "{{ phpfpm_nextcloud_service.stdout }}"
+    - nginx
 
 - name: Run Nextcloud occ upgrade
   shell: |
