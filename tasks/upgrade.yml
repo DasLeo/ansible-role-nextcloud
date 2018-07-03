@@ -25,7 +25,7 @@
     state: stopped
   loop:
     - nginx
-    - phpfpm_nextcloud_service.stdout
+    - "{{ phpfpm_nextcloud_service.stdout }}"
 
 - name: Rename current Nextcloud folder
   shell: "mv {{ nextcloud_path }}{,-old}"
@@ -75,7 +75,7 @@
     state: started
   loop:
     - nginx
-    - phpfpm_nextcloud_service.stdout
+    - "{{ phpfpm_nextcloud_service.stdout }}"
 
 - name: Run Nextcloud occ upgrade
   shell: |
