@@ -84,7 +84,7 @@
   args:
     chdir: "{{ nextcloud_path }}"
   register: nextcloud_occ_upgrade
-  failed_when: 'Update successful' not in nextcloud_occ_upgrade.stdout or nextcloud_occ_upgrade.rc != 0
+  failed_when: "'Update successful' not in nextcloud_occ_upgrade.stdout or nextcloud_occ_upgrade.rc != 0"
 
 - name: Disabling Nextcloud maintenance mode
   shell: |
