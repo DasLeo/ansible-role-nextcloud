@@ -3,7 +3,7 @@
 - name: Check current setting for {{ item.name }}
   shell: |
     sudo -u {{ nextcloud_user }} -- sh -c \
-    'umask 0027; php occ config:system:get {{ item.name }} --value="{{ item.value }}"'
+    'umask 0027; php occ config:system:get {{ item.name }}'
   args:
     chdir: "{{ nextcloud_path }}"
   register: config_setting
