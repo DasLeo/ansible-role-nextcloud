@@ -5,7 +5,7 @@
     sudo -u {{ nextcloud_user }} -- sh -c \
     'umask 0027; php occ config:system:get {{ item.name }} --value="{{ item.value }}"'
   args:
-    chdir:
+    chdir: "{{ nextcloud_path }}"
   register: config_setting
   changed_when: false
 
