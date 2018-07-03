@@ -31,23 +31,7 @@
   when: nextcloud_install.stat.exists and nextcloud_version is version(nextcloud_installed_version, '>')
 
 - name: Setting Nextcloud config settings in config.php
-  block:
-    - name: Check current setting for {{ item.name }}
-      shell: |
-        sudo -u {{ nextcloud_user }} -- sh -c \
-        'umask 0027; php occ config:system:get {{ item.name }} --value="{{ item.value }}"'
-      args:
-        chdir:
-      register: config_setting
-      changed_when: false
-
-    - name: Setting {{ item.name }} to {{ item.value }}
-      shell: |
-        sudo -u {{ nextcloud_user }} -- sh -c \
-        'umask 0027; php occ config:system:set {{ item.name }} --value="{{ item.value }}"'
-      args:
-        chdir: "{{ nextcloud_path }}"
-      when: config_setting.stdout != item.value
+  include_tasks: nextcloud-config.yml
   loop: "{{ nextcloud_config_settings }}"
   
 - name: Setting strict permissions
