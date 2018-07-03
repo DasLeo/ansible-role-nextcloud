@@ -102,3 +102,6 @@
     name: nextcloudcron.timer
     state: started
     enabled: yes
+
+- name: Delete old Nextcloud backup folder
+  shell: "rm -rf {{ nextcloud_path }}-old"
