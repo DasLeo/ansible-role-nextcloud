@@ -22,3 +22,6 @@
 - name: Nextcloud upgrade install
   include_tasks: upgrade.yml
   when: nextcloud_install.stat.exists
+
+- name: Setting strict permissions
+  include_tasks: strict-permissions.yml
