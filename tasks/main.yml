@@ -33,6 +33,4 @@
 - name: Setting Nextcloud config settings in config.php
   include_tasks: nextcloud-config.yml
   loop: "{{ nextcloud_config_settings }}"
-  
-- name: Setting strict permissions
-  include_tasks: strict-permissions.yml
+
