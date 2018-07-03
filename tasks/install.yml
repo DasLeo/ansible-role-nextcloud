@@ -33,7 +33,7 @@
         path: "{{ nextcloud_path }}"
         owner: root
         group: "{{ nextcloud_user }}"
-        mode: u=rwX,g=rX
+        mode: u=rwX,g=rX,o-rwx
         recurse: yes
     - file:
         path: "{{ nextcloud_path }}/{{ item }}"
