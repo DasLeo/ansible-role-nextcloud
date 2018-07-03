@@ -7,7 +7,7 @@
   args:
     chdir: "{{ nextcloud_path }}"
   register: config_setting
-  failed_when: config_setting.rc == 1 and (config_setting.stdout is defined or config_setting.stderr is defined)
+  failed_when: config_setting.rc == 1 and (config_setting.stdout != "" or config_setting.stderr != "")
   changed_when: false
 
 - name: Setting {{ item.name }} to {{ item.value }}
