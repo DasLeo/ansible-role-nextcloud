@@ -28,7 +28,7 @@
     - "{{ phpfpm_nextcloud_service.stdout }}"
 
 - name: Rename current Nextcloud folder
-  shell: "mv {{ nextcloud_path }}{,-old}"
+  shell: "mv {{ nextcloud_path }} {{ nextcloud_path }}-old"
 
 - name: Create new Nextcloud root directory
   file:
