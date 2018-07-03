@@ -16,7 +16,7 @@
     dest: "{{ nextcloud_path }}/"
     owner: root
     group: "{{ nextcloud_user }}"
-    mode: u=rwX,g=rX
+    mode: u=rwX,g=rX,o-rwx
     extra_opts:
     - --strip-components=1
 
