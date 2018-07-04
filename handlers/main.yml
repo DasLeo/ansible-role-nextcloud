@@ -1,0 +1,7 @@
+---
+
+- name: Enable and restart Nextcloud systemd timer
+  systemd:
+    name: nextcloudcron.timer
+    state: restarted
+    enabled: yes
