@@ -2,6 +2,7 @@
 
 nextcloud_version: 12.0.7
 nextcloud_path: /var/www/nextcloud
+# nextcloud_data_folder: /mnt/nfs/data
 nextcloud_user: nextcloud
 nextcloud_urls:
   - cloud.exmaple.net

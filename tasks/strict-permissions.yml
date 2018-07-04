@@ -7,12 +7,20 @@
     - data
     - assets
     - updater
+  when: nextcloud_data_folder not defined
+
+- file:
+    path: "{{ nextcloud_data_folder }}"
+    state: directory
+  when: nextcloud_data_folder is defined
+
 - file:
     path: "{{ nextcloud_path }}"
     owner: root
     group: "{{ nextcloud_user }}"
     mode: u=rwX,g=rX,o-rwx
     recurse: yes
+
 - file:
     path: "{{ nextcloud_path }}/{{ item }}"
     owner: "{{ nextcloud_user }}"
@@ -25,6 +33,16 @@
     - data
     - themes
     - updater
+  when: nextcloud_data_folder not defined
+
+- file:
+    path: "{{ nextcloud_data_folder }}"
+    owner: "{{ nextcloud_user }}"
+    group: "{{ nextcloud_user }}"
+    mode: u=rwX,g=rX,o-rwx
+    recurse: yes
+  when: nextcloud_data_folder is defined
+
 - file:
     path: "{{ nextcloud_path }}/occ"
     mode: '+x'
