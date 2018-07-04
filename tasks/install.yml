@@ -64,13 +64,3 @@
 
 - debug:
     msg: "{{ nextcloud_occ_install.stdout }}"
-
-- name: Add trusted domains to config
-  shell: |
-    sudo -u {{ nextcloud_user }} -- sh -c \
-    'umask 0027; php occ config:system:set trusted_domains {{ index }} --value="{{ item }}"'
-  args:
-    chdir: "{{ nextcloud_path }}"
-  loop: "{{ nextcloud_urls }}"
-  loop_control:
-    index_var: index
