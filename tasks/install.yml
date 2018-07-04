@@ -39,7 +39,7 @@
     --database-pass "{{ nextcloud_db_password }}" \
     --admin-user "{{ nextcloud_admin }}" \
     --admin-pass "{{ nextcloud_admin_password }}" \
-    --data-dir "{% if nextcloud_data_folder not defined %}{{ nextcloud_path }}/data{% else %}{{ nextcloud_data_folder }}{% endif %}"'
+    --data-dir "{% if nextcloud_data_folder is not defined %}{{ nextcloud_path }}/data{% else %}{{ nextcloud_data_folder }}{% endif %}"'
   args:
     chdir: "{{ nextcloud_path }}"
   register: nextcloud_occ_install
@@ -56,7 +56,7 @@
     --database-pass "{{ nextcloud_db_password }}" \
     --admin-user "{{ nextcloud_admin }}" \
     --admin-pass "{{ nextcloud_admin_password }}" \
-    --data-dir "{% if nextcloud_data_folder not defined %}{{ nextcloud_path }}/data{% else %}{{ nextcloud_data_folder }}{% endif %}"'
+    --data-dir "{% if nextcloud_data_folder is not defined %}{{ nextcloud_path }}/data{% else %}{{ nextcloud_data_folder }}{% endif %}"'
   args:
     chdir: "{{ nextcloud_path }}"
   register: nextcloud_occ_install

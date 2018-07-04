@@ -60,7 +60,7 @@
 
 - name: Move data folder to new version folder
   shell: "mv {{ nextcloud_path }}-old/data {{ nextcloud_path }}/data"
-  when: nextcloud_data_folder not defined
+  when: nextcloud_data_folder is not defined
 
 - name: Copy missing Nextcloud Apps to new version folder
   shell: "cp -r --no-clobber '{{ nextcloud_path }}-old/apps/{{ item }}' '{{ nextcloud_path }}/apps/{{ item }}'"
