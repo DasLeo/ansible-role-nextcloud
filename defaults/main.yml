@@ -27,10 +27,6 @@ nextcloud_redis_config:
 # - name: 'redis password'
 #   value: "{{ nextcloud_redis_password }}"
 
-nextcloud_redis_host: '127.0.0.1'
-nextcloud_redis_port: 6379
-nextcloud_redis_password: []
-
 nextcloud_config_settings:
   - name: memcache.local
     value: '\OC\Memcache\APCu'
