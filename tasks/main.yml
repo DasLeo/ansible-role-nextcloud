@@ -30,6 +30,11 @@
   include_tasks: upgrade.yml
   when: nextcloud_install.stat.exists and nextcloud_version is version(nextcloud_installed_version.stdout, '>')
 
+- name: Setting Nextcloud Redis config
+  include_tasks: nextcloud-config.yml
+  loop: "{{ nextcloud_redis_config }}"
+  when: nextcloud_redis_use
+
 - name: Setting Nextcloud config settings in config.php
   include_tasks: nextcloud-config.yml
   loop: "{{ nextcloud_config_settings }}"
