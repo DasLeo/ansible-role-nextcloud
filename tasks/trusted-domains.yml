@@ -16,4 +16,4 @@
     'umask 0027; php occ config:system:set trusted_domains {{ index }} --value="{{ item }}"'
   args:
     chdir: "{{ nextcloud_path }}"
-  when: trusted_domains_setting.stdout != item.value
+  when: trusted_domains_setting.stdout != item
