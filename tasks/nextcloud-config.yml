@@ -5,6 +5,7 @@
   args:
     chdir: "{{ nextcloud_path }}"
     executable: /bin/sh
+  become: yes
   become_user: "{{ nextcloud_user }}"
   register: config_setting
   failed_when: config_setting.rc == 1 and (config_setting.stdout != "" or config_setting.stderr != "")
@@ -15,5 +16,6 @@
   args:
     chdir: "{{ nextcloud_path }}"
     executable: /bin/sh
+  become: yes
   become_user: "{{ nextcloud_user }}"
   when: config_setting.stdout != item.value
