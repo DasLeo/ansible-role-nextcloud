@@ -33,7 +33,7 @@
 - name: Setting Nextcloud Redis config
   include_tasks: nextcloud-config.yml
   loop: "{{ nextcloud_redis_config }}"
-  when: nextcloud_redis_use
+  when: nextcloud_redis_use|bool
 
 - include_tasks: trusted-domains.yml
   loop: "{{ nextcloud_urls }}"
