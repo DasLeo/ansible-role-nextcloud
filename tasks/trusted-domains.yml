@@ -1,19 +1,19 @@
 ---
 
 - name: Check for trusted domain {{ item }}
-  shell: |
-    sudo -u {{ nextcloud_user }} -- sh -c \
-    'umask 0027; php occ config:system:get trusted_domains {{ index }}'
+  shell: umask 0027; php occ config:system:get trusted_domains {{ index }}
   args:
     chdir: "{{ nextcloud_path }}"
+    executable: /bin/sh
+  become_user: "{{ nextcloud_user }}"
   register: trusted_domains_setting
   failed_when: trusted_domains_setting.rc == 1 and (trusted_domains_setting.stdout != "" or trusted_domains_setting.stderr != "")
   changed_when: false
 
 - name: Add trusted domain {{ item }} to config
-  shell: |
-    sudo -u {{ nextcloud_user }} -- sh -c \
-    'umask 0027; php occ config:system:set trusted_domains {{ index }} --value="{{ item }}"'
+  shell: umask 0027; php occ config:system:set trusted_domains {{ index }} --value="{{ item }}"
   args:
     chdir: "{{ nextcloud_path }}"
+    executable: /bin/sh
+  become_user: "{{ nextcloud_user }}"
   when: trusted_domains_setting.stdout != item
