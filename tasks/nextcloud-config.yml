@@ -1,19 +1,19 @@
 ---
 
 - name: Check current setting for {{ item.name }}
-  shell: |
-    sudo -u {{ nextcloud_user }} -- sh -c \
-    'umask 0027; php occ config:system:get {{ item.name }}'
+  shell: umask 0027; php occ config:system:get {{ item.name }}
   args:
     chdir: "{{ nextcloud_path }}"
+    executable: /bin/sh
+  become_user: "{{ nextcloud_user }}"
   register: config_setting
   failed_when: config_setting.rc == 1 and (config_setting.stdout != "" or config_setting.stderr != "")
   changed_when: false
 
 - name: Setting {{ item.name }} to {{ item.value }}
-  shell: |
-    sudo -u {{ nextcloud_user }} -- sh -c \
-    'umask 0027; php occ config:system:set {{ item.name }} --value="{{ item.value }}"'
+  shell: umask 0027; php occ config:system:set {{ item.name }} --value="{{ item.value }}"
   args:
     chdir: "{{ nextcloud_path }}"
+    executable: /bin/sh
+  become_user: "{{ nextcloud_user }}"
   when: config_setting.stdout != item.value
