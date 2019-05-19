@@ -11,11 +11,11 @@
     enabled: no
 
 - name: Putting Nextcloud into Maintenance mode
-  shell: |
-    sudo -u {{ nextcloud_user }} -- sh -c \
-    'umask 0027; php occ maintenance:mode --on'
+  shell: umask 0027; php occ maintenance:mode --on
   args:
     chdir: "{{ nextcloud_path }}"
+    executable: /bin/sh
+  become_user: "{{ nextcloud_user }}"
   register: maintenance_mode
   failed_when: maintenance_mode.stdout != 'Maintenance mode enabled' or maintenance_mode.rc != 0
 
@@ -79,22 +79,22 @@
     - nginx
 
 - name: Run Nextcloud occ upgrade
-  shell: |
-    sudo -u {{ nextcloud_user }} -- sh -c \
-    'umask 0027; php occ upgrade'
+  shell: umask 0027; php occ upgrade
   args:
     chdir: "{{ nextcloud_path }}"
+    executable: /bin/sh
+  become_user: "{{ nextcloud_user }}"
   register: nextcloud_occ_upgrade
   failed_when: "'Update successful' not in nextcloud_occ_upgrade.stdout or nextcloud_occ_upgrade.rc != 0"
 
 - debug: var=nextcloud_occ_upgrade.stdout_lines
 
 - name: Disabling Nextcloud maintenance mode
-  shell: |
-    sudo -u {{ nextcloud_user }} -- sh -c \
-    'umask 0027; php occ maintenance:mode --off'
+  shell: umask 0027; php occ maintenance:mode --off
   args:
     chdir: "{{ nextcloud_path }}"
+    executable: /bin/sh
+  become_user: "{{ nextcloud_user }}"
   register: maintenance_mode
   failed_when: maintenance_mode.stdout != 'Maintenance mode disabled' or maintenance_mode.rc != 0
 

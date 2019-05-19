@@ -29,8 +29,7 @@
 
 - name: Install Nextcloud on remote database server
   command: |
-    sudo -u {{ nextcloud_user }} -- sh -c \
-    'umask 0027; \
+    umask 0027; \
     php occ maintenance:install \
     --database "mysql" \
     --database-name "{{ nextcloud_db_name }}" \
@@ -39,16 +38,17 @@
     --database-pass "{{ nextcloud_db_password }}" \
     --admin-user "{{ nextcloud_admin }}" \
     --admin-pass "{{ nextcloud_admin_password }}" \
-    --data-dir "{% if nextcloud_data_folder is not defined %}{{ nextcloud_path }}/data{% else %}{{ nextcloud_data_folder }}{% endif %}"'
+    --data-dir "{% if nextcloud_data_folder is not defined %}{{ nextcloud_path }}/data{% else %}{{ nextcloud_data_folder }}{% endif %}"
   args:
     chdir: "{{ nextcloud_path }}"
+    executable: /bin/sh
+  become_user: "{{ nextcloud_user }}"
   register: nextcloud_occ_install
   when: not localdb.stat.exists
 
 - name: Install Nextcloud on local database server
   command: |
-    sudo -u {{ nextcloud_user }} -- sh -c \
-    'umask 0027; \
+    umask 0027; \
     php occ maintenance:install \
     --database "mysql" \
     --database-name "{{ nextcloud_db_name }}" \
@@ -56,9 +56,11 @@
     --database-pass "{{ nextcloud_db_password }}" \
     --admin-user "{{ nextcloud_admin }}" \
     --admin-pass "{{ nextcloud_admin_password }}" \
-    --data-dir "{% if nextcloud_data_folder is not defined %}{{ nextcloud_path }}/data{% else %}{{ nextcloud_data_folder }}{% endif %}"'
+    --data-dir "{% if nextcloud_data_folder is not defined %}{{ nextcloud_path }}/data{% else %}{{ nextcloud_data_folder }}{% endif %}"
   args:
     chdir: "{{ nextcloud_path }}"
+    executable: /bin/sh
+  become_user: "{{ nextcloud_user }}"
   register: nextcloud_occ_install
   when: localdb.stat.exists
 
