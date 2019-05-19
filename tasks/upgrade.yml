@@ -65,7 +65,7 @@
 - name: Copy missing Nextcloud Apps to new version folder
   shell: "cp -r --no-clobber '{{ nextcloud_path }}-old/apps/{{ item }}' '{{ nextcloud_path }}/apps/{{ item }}'"
   loop: "{{ nextcloud_apps }}"
-  when: nextcloud_use_custom_apps
+  when: nextcloud_use_custom_apps|bool
 
 - name: Setting strict permissions
   include_tasks: strict-permissions.yml
