@@ -105,4 +105,6 @@
     enabled: yes
 
 - name: Delete old Nextcloud backup folder
-  shell: "rm -rf {{ nextcloud_path }}-old"
+  file:
+    path: "{{ nextcloud_path }}-old"
+    state: absent
