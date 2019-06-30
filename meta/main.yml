@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: Philipp Leonhardt
+  role_name: ansible-role-nextcloud
+  description: Ansible Role - Nextcloud
+  min_ansible_version: 2.5.1
+  license: BSD-3-Clause
+  galaxy_tags:
+    - owncloud
+    - nextcloud
+    - cloud
+    - selfhosted
+  platforms:
+    - name: Ubuntu
+      versions:
+        - bionic
+        
